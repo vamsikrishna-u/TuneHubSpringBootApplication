@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<style>
+body{
+text-align:center;
+padding:13% 25%;
+background-color:pink;
+}
+</style>
+</head>
+<body>
+  <form action="/registerformcontrol" method="post">
+    <label>User Name:</label>
+    <input type="text" name="username" required/>
+    <br><br>
+    <label>Email Id:</label>
+    <input type="email" name="emailId" required/>
+    <br><br>
+    <label>Password:</label>
+    <input type="password" name="password" required/>
+    <br><br>
+    
+    <label>Gender</label>
+     <input type="radio" name="gender" value="male" required/>Male
+    
+     <input type="radio" name="gender" value="female" required/>Female
+     
+     <input type="radio" name="gender" value="others" required/>Others
+     
+     <br><br>
+     
+     <label>Role:</label>
+     <input type="radio" name="role" value="admin" required/>Admin
+     <input type="radio" name="role" value="user" required/>User
+     
+     <br><br>
+     
+     <label>Address:</label>
+     <input type="textarea" name="address" value="address" required/>
+     
+     <br><br>
+     <input type="submit" value="REGISTER"/>
+    
+  
+  
+  </form>
+
+</body>
+</html>

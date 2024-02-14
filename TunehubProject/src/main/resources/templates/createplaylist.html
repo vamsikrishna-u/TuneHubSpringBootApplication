@@ -1,0 +1,28 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<form action="/add" method="post">
+<lable>Enter PlayList Name:</lable>
+ <input type="text" name="name" required placeholder="Enter PlayList Name">
+ 
+ <br><br>
+ 
+   <div th:each="songs:${songs}">
+   <input type="checkbox" th:name="songs" th:value="${songs.id}">
+   <label th:text="${songs.name}"></label>
+   
+ 
+   </div>
+    <input type="submit" value="ADD PlayLsit">
+  </form>
+
+
+</body>
+</html>

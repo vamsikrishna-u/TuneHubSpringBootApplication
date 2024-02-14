@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>All Songs You added</h1>
+<table border="1">
+<tr>
+<td>Id</td>
+<td>Name</td>
+<td>Artist</td>
+<td>Genre</td>
+<td>Link</td>
+</tr>
+
+<tr th:each="songsList : ${songsList}">
+<td th:text="${songsList.id}"></td>
+<td th:text="${songsList.name}"></td>
+<td th:text="${songsList.artist}"></td>
+<td th:text="${songsList.genre}"></td>
+<td>
+        <audio controls>
+            <source th:src="${songsList.link}" type="audio/ogg">
+            Your browser does not support the audio element.
+        </audio>
+    </td>
+</tr>
+
+
+
+
+</table>
+
+</body>
+</html>

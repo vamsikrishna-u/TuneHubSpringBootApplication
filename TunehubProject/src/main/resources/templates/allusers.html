@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>All users</h1>
+<table border="1">
+
+<tr>
+
+<td>Id</td>
+<td>username</td>
+<td>emailId</td>
+<td>password</td>
+<td>gender</td>
+<td>role</td>
+<td>address</td>
+
+</tr>
+
+<tr th:each="users : ${users}">
+<td th:text="${users.id}"></td>
+<td th:text="${users.username}"></td>
+<td th:text="${users.emailId}"></td>
+<td th:text="${users.password}"></td>
+<td th:text="${users.gender}"></td>
+<td th:text="${users.role}"></td>
+<td th:text="${users.address}"></td>
+
+
+
+
+</tr>
+
+</table>
+           
+
+</body>
+</html>
