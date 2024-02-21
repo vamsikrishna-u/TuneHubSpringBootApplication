@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,19 +7,17 @@
 <body>
 
 <form action="/add" method="post">
-<label>Enter PlayList Name:</label>
- <input type="text" name="name" required placeholder="Enter PlayList Name">
- 
- <br><br>
+ <lable>Enter PlayList Name:</lable>
+ <input type="text" name="name" required placeholder="Enter PlayList Name"><br><br>
  
    <div th:each="songs:${songs}">
-   <input type="checkbox" th:name="songs" th:value="${songs.id}">
-   <label th:text="${songs.name}"></label>
-   
- 
+     <input type="checkbox" th:name="songs" th:value="${songs.id}">
+     <label th:text="${songs.name}"></label>
    </div>
+   
     <input type="submit" value="ADD PlayLsit">
-  </form>
+    
+ </form>
 
 
 </body>

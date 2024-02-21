@@ -57,5 +57,15 @@ public class playlistController {
 		model.addAttribute("playlist", playlist);
 		return "viewplaylist";
 	}
+	
+	@GetMapping("/map-userCreateplaylist")
+	public String userCreatePlayList(Model model)
+	{
+		
+		List<Songs>songslist=songServ.fetchSongs();
+		
+		model.addAttribute("songs",songslist);
+		return "createplaylist";
+	}
 
 }

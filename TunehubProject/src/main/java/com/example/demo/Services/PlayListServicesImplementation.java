@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Entities.Playlist;
+import com.example.demo.Entities.Users;
 import com.example.demo.Repositories.PlayListRepositories;
+import com.example.demo.Repositories.UserRepositories;
 
 @Service
 public class PlayListServicesImplementation implements PlayListServices {
@@ -29,6 +31,22 @@ public class PlayListServicesImplementation implements PlayListServices {
 		
 		
 	}
+	@Autowired
+	UserRepositories userRepo;
+	@Override
+	public List<Playlist> userPlayList(String email) {
+		Users user=userRepo.findByEmailId(email);
+		List<Playlist>ll=user.getUserplaylist();
+		//List<Playlist>uplayList=pRepo.findById(ll);
+		return ll;
+	}
+
+
+//	@Override
+//	public List<Playlist> userPlayListings(int userId) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	
 	

@@ -39,6 +39,11 @@ public class NavController {
 		return "samplepayment";
 		
 	}
+	@GetMapping("/forgotpassword")
+	public String forgetPassword()
+	{
+		return "forgotpassword";
+	}
 	
 
 

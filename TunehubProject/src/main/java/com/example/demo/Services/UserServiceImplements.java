@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Entities.Playlist;
 import com.example.demo.Entities.Songs;
 import com.example.demo.Entities.Users;
 import com.example.demo.Repositories.SongRepositories;
@@ -83,6 +84,14 @@ public class UserServiceImplements implements UserServices{
 		public void updateUser(Users user) {
 			// TODO Auto-generated method stub
 			userRepo.save(user);
+			
+		}
+
+
+		@Override
+		public void addPlaylistToUser(Users user, Playlist plist) {
+			user.getUserplaylist().add(plist);
+	        userRepo.save(user);
 			
 		}
 
