@@ -45,6 +45,12 @@ public class NavController {
 		return "forgotpassword";
 	}
 	
+	@GetMapping("/test")
+	public String testGit() {
+		System.out.println("testing");
+		return "";
+	}
+	
 
 
 }
