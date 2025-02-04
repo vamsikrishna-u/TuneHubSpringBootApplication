@@ -3,15 +3,21 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<style type="text/css">
+body{text-align : center;background-color:lightblue;}
+.button{background-color:green;font-size:20px;color:white
+}
+</style>
 </head>
 <body>
-<h1>You can reset password here</h1>
+
+<h1 style="color:red;">Reset Password</h1>
 <form action="/passwordresetformaction" method="post">
-<label>Enter New Password</label>
+<label style="padding-right:20px;">Enter New Password*</label>
 <input type="text" name="pass1" required><br><br>
-<label>Re-Enter New Password</label>
-<input type="text" name="passreset" required>
-<button>Submit</button>
+<label>Re-Enter New Password*</label>
+<input type="text" name="passreset" required><br><br>
+<button class="button">Submit</button>
 
 </form>
 </body>

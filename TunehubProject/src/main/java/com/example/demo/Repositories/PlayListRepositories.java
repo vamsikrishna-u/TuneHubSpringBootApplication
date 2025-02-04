@@ -11,7 +11,7 @@ public interface PlayListRepositories extends JpaRepository <Playlist,Integer>{
 	
 	public Playlist findByName(String name);
 
-	public List<Playlist> findById(int userId);
+	//public List<Playlist> findById(int userId);
 	
 	
 

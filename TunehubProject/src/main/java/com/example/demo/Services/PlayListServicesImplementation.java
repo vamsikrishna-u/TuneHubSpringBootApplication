@@ -15,40 +15,23 @@ public class PlayListServicesImplementation implements PlayListServices {
 	
 	@Autowired
 	PlayListRepositories pRepo;
-	
 
 	@Override
 	public String addPlayList(Playlist plist) {
 		pRepo.save(plist);
-		
 		return "play list added";
 	}
-
-
 	@Override
 	public List<Playlist> playlistfindAll() {
-		return pRepo.findAll();
-		
-		
+		return pRepo.findAll();	
 	}
+	
 	@Autowired
 	UserRepositories userRepo;
 	@Override
 	public List<Playlist> userPlayList(String email) {
 		Users user=userRepo.findByEmailId(email);
 		List<Playlist>ll=user.getUserplaylist();
-		//List<Playlist>uplayList=pRepo.findById(ll);
 		return ll;
 	}
-
-
-//	@Override
-//	public List<Playlist> userPlayListings(int userId) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
-	
-	
-
 }

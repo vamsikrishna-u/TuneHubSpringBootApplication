@@ -132,9 +132,6 @@ public class UserController {
 		Users user=userServ.getUser(email);
 		 user.getUserplaylist().add(plist);
 		userServ.addPlaylistToUser(user, plist);
-		//userServ.updateUser(user);
-		
-		
 		for(Songs song:plist.getSongs() )
 		{
 			song.getPlaylist().add(plist);
@@ -152,6 +149,33 @@ public class UserController {
 		model.addAttribute("playlist", playlist);
 		return "userviewplaylist";
 	}
+	
+	//Admin Adding Playlist
+	@PostMapping("/add")
+	public String adminPlayListDisplay(HttpSession session,@ModelAttribute Playlist plist)
+	{
+		String email=(String)session.getAttribute("email");
+		Users user=userServ.getUser(email);
+		 user.getUserplaylist().add(plist);
+		userServ.addPlaylistToUser(user, plist);
+		for(Songs song:plist.getSongs() )
+		{
+			song.getPlaylist().add(plist);
+			songServ.updateSong(song);
+		}
+		return "Playlistsuccess";
+	}
+	
+	@GetMapping("/map-viewadminplaylist")
+	public String adminfetchLists(Model model,HttpSession session)
+	{
+		String email=(String)session.getAttribute("email");
+		
+		List<Playlist> playlist=pServ.userPlayList(email);
+		model.addAttribute("playlist", playlist);
+		return "adminviewplaylist";
+	}
+	
 }
 	
 	

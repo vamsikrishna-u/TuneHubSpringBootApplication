@@ -3,6 +3,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
+<link rel='stylesheet'  th:href="@{/CSS/allsongs.css}">
 </head>
 <body>
 <h1>All Songs You added</h1>
@@ -12,7 +13,7 @@
 <td>Name</td>
 <td>Artist</td>
 <td>Genre</td>
-<td>Link</td>
+<td>Songs</td>
 </tr>
 
 <tr th:each="songsList : ${songsList}">

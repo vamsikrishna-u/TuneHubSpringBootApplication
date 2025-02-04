@@ -14,6 +14,8 @@ import com.example.demo.Entities.Songs;
 import com.example.demo.Services.PlayListServices;
 import com.example.demo.Services.SongServices;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class playlistController {
 	
@@ -32,22 +34,6 @@ public class playlistController {
 		
 		model.addAttribute("songs",songslist);
 		return "createplaylist";
-	}
-	
-	
-	@PostMapping("/add")
-	public String playListDisplay(@ModelAttribute Playlist plist)
-	{
-		pServ.addPlayList(plist);
-		List<Songs>songlist=plist.getSongs();
-		for(Songs song:songlist )
-		{
-			song.getPlaylist().add(plist);
-			songServ.updateSong(song);
-		}
-		
-		
-		return "Playlistsuccess";
 	}
 	
 	@GetMapping("/map-viewplaylist")

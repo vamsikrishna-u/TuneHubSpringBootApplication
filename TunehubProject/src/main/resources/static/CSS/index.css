@@ -11,22 +11,16 @@ a {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 4px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.5s ease;
 }
 
 a {
   background-color: #4CAF50; /* Green */
 }
-
-a {
-  background-color: #007BFF; /* Blue */
-}
-
-a {
-  background-color: #3e3e3e; /* Darker grey on hover */
-}
 body{
 	text-align:center;
+	background-color:lightblue;
+	font-family: "Lucida Console", "Courier New", monospace;
 }
 a:hover{
 	background-color:red;
