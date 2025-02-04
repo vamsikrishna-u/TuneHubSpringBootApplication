@@ -48,7 +48,7 @@ public class NavController {
 	@GetMapping("/test")
 	public String testGit() {
 		System.out.println("testing");
-		return "";
+		return "testing";
 	}
 	
 
