@@ -45,6 +45,13 @@ public class NavController {
 		return "forgotpassword";
 	}
 	
+	@GetMapping("/testAuthor")
+	public String testAuthor()
+	{
+		return "testAuthor";
+	}
+	
+	
 	
 	
 
