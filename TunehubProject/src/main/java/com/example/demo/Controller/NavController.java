@@ -51,6 +51,13 @@ public class NavController {
 		return "testAuthor";
 	}
 	
+	@GetMapping("/newUserTestGitpull")
+	public String testPull()
+	{
+		return "newusertest";
+	}
+	
+	
 	
 	
 	
