@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<form action="/logout" method="get" class="div">
+<form th:action="@{/logout}" method="post" class="div">
 <button>Logout</button>
 </form>
 <h1 >Welcome Mr Admin  </h1>
@@ -16,6 +16,7 @@
 <a href="/map-createplaylist">Create PlayList</a><br><br>
 <a href="/map-viewplaylist">View PlayList</a><br><br>
 <a href="/map-viewadminplaylist">View Admin Playlist</a>
+<br><br><a href="/change-password">Change password</a>
 
 
 

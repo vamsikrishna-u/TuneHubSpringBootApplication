@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
@@ -12,7 +12,7 @@ background-color : lightblue;
 </style>
 </head>
 <body>
-	<form action="/loginformcontrol" method="post">
+	<form th:action="@{/loginformcontrol}" method="post">
    <label>Enter Email Id:</label>
    <input type="email" name="email">
    

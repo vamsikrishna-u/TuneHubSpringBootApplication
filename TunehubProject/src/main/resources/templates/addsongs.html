@@ -6,7 +6,7 @@
 <link rel='stylesheet' th:href="@{/CSS/addsongs.css}">
 </head>
 <body>
-<form action="/map-addsongsin" method='post'>
+<form th:action="@{/map-addsongsin}" method='post'>
 <label>Song name: </label>
 <input type="text" name="name" required/><br>
 <label>Song Artist: </label>
