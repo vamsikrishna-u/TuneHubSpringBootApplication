@@ -6,7 +6,7 @@
 <link rel='stylesheet' th:href="@{/CSS/register.css}">
 </head>
 <body>
-  <form action="/registerformcontrol" method="post">
+  <form th:action="@{/registerformcontrol}" method="post">
     <label>User Name:</label>
     <input type="text" name="username" required/>
     <br><br>
@@ -23,12 +23,6 @@
      <input type="radio" name="gender" value="female" required/>Female
      
      <input type="radio" name="gender" value="others" required/>Others
-     
-     <br><br>
-     
-     <label>Role:</label>
-     <input type="radio" name="role" value="admin" required/>Admin
-     <input type="radio" name="role" value="user" required/>User
      
      <br><br>
      

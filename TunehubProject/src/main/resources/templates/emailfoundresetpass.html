@@ -12,11 +12,15 @@ body{text-align : center;background-color:lightblue;}
 <body>
 
 <h1 style="color:red;">Reset Password</h1>
-<form action="/passwordresetformaction" method="post">
+<form th:action="@{/passwordresetformaction}" method="post">
+<label>Current Password*</label>
+<input type="password" name="currentPassword" required><br><br>
 <label style="padding-right:20px;">Enter New Password*</label>
-<input type="text" name="pass1" required><br><br>
+<input type="password" name="pass1" required><br><br>
 <label>Re-Enter New Password*</label>
-<input type="text" name="passreset" required><br><br>
+<input type="password" name="passreset" required><br><br>
+<p th:if="${passwordMismatch}" style="color:red;">Passwords do not match.</p>
+<p th:if="${currentPasswordInvalid}" style="color:red;">Current password is incorrect.</p>
 <button class="button">Submit</button>
 
 </form>

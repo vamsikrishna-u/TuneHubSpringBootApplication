@@ -1,21 +1,25 @@
 package com.example.demo.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Entities.Playlist;
-import com.example.demo.Entities.Songs;
 import com.example.demo.Entities.Users;
-import com.example.demo.Repositories.SongRepositories;
 import com.example.demo.Repositories.UserRepositories;
 
 @Service
 public class UserServiceImplements implements UserServices {
 
-	@Autowired
-	UserRepositories userRepo;
+	private final UserRepositories userRepo;
+	private final PasswordEncoder passwordEncoder;
+
+	public UserServiceImplements(UserRepositories userRepo, PasswordEncoder passwordEncoder) {
+		this.userRepo = userRepo;
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	@Override
 	public boolean byEmail(String emailId) {
@@ -30,6 +34,11 @@ public class UserServiceImplements implements UserServices {
 
 	@Override
 	public String addUser(Users userServ) {
+		userServ.setId(0);
+		userServ.setPassword(passwordEncoder.encode(userServ.getPassword()));
+		userServ.setRole("CUSTOMER");
+		userServ.setPremium(false);
+		userServ.setUserplaylist(new ArrayList<>());
 		userRepo.save(userServ);
 		return "User created and added";
 	}
@@ -38,14 +47,7 @@ public class UserServiceImplements implements UserServices {
 	public boolean validateUser(String email, String password) {
 		// TODO Auto-generated method stub
 		Users user = userRepo.findByEmailId(email);
-		String dbPassword = user.getPassword();
-
-		if (dbPassword.equals(password)) {
-
-			return true;
-		} else {
-			return false;
-		}
+		return user != null && passwordEncoder.matches(password, user.getPassword());
 
 	}
 
@@ -76,6 +78,17 @@ public class UserServiceImplements implements UserServices {
 		// TODO Auto-generated method stub
 		userRepo.save(user);
 
+	}
+
+	@Override
+	public boolean updatePassword(String email, String currentPassword, String newPassword) {
+		Users user = userRepo.findByEmailId(email);
+		if (user == null || !passwordEncoder.matches(currentPassword, user.getPassword())) {
+			return false;
+		}
+		user.setPassword(passwordEncoder.encode(newPassword));
+		userRepo.save(user);
+		return true;
 	}
 
 	@Override

@@ -2,6 +2,8 @@
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	
 	<title>Payment</title>
 	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -20,7 +22,11 @@
    
 </div>
 
-<script>
+<script th:inline="javascript">
+const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+$.ajaxSetup({beforeSend: function(xhr) { xhr.setRequestHeader(csrfHeader, csrfToken); }});
+
 $(document).ready(function() {
     $(".buy-button").click(function(e) {
         e.preventDefault();
@@ -35,30 +41,29 @@ function createOrder() {
 	
     $.post("/createOrder")
         .done(function(order) {
-            order = JSON.parse(order);
             var options = {
-                "key": "rzp_test_OglT6jM5iA81Sy",
-                "amount": order.amount_due.toString(),
-                "currency": "INR",
+				"key": "[[${razorpayKeyId}]]",
+                "amount": order.amount,
+                "currency": order.currency,
                 "name": "Tune Hub",
-                "description": "Test Transaction",
-                "order_id": order.id,
+                "description": "TuneHub Premium",
+                "order_id": order.orderId,
                 "handler": function (response) {
                     verifyPayment(response.razorpay_order_id, response.razorpay_payment_id, response.razorpay_signature);
                 },
-                "prefill": {
-                    "name": "Vamsikrishna",
-                    "email": "vamsi@gmail.com",
-                    "contact": "9502519251"
-                },
-                "notes": {
-                    "address": "Banglore"
+                "modal": {
+                    "ondismiss": function () {
+                        alert("Payment was not completed. You can try again.");
+                    }
                 },
                 "theme": {
                     "color": "#F37254"
                 }
             };
             var rzp1 = new Razorpay(options);
+            rzp1.on("payment.failed", function () {
+                alert("Payment failed. Premium access was not activated. Please retry.");
+            });
             rzp1.open();
         })
         .fail(function(error) {
@@ -67,19 +72,23 @@ function createOrder() {
 }
 
 function verifyPayment(orderId, paymentId, signature) {
-     $.post("/verify", { orderId: orderId, paymentId: paymentId, signature: signature })
-         .done(function(isValid) {
-             if (isValid) {
-                 alert("Payment successful");
-                 window.location.href = 'payment-success';
-             } else {
-                 alert("Payment failed");
-                 window.location.href = 'payment-failure';
-             }
-         })
-         .fail(function(error) {
-             console.error("Error:", error);
-         });
+    $.ajax({
+        url: "/verify",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ orderId: orderId, paymentId: paymentId, signature: signature })
+    }).done(function(result) {
+        if (result.verified) {
+            window.location.href = "/showallsongs";
+        } else {
+            alert(result.message);
+        }
+    }).fail(function(xhr) {
+        var response = xhr.responseJSON;
+        alert(response && response.message
+            ? response.message
+            : "Payment verification is temporarily unavailable. Please retry.");
+    });
 }
 </script>
 </body>

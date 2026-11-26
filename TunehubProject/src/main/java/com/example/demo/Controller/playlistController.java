@@ -14,7 +14,6 @@ import com.example.demo.Entities.Songs;
 import com.example.demo.Services.PlayListServices;
 import com.example.demo.Services.SongServices;
 
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class playlistController {
@@ -51,7 +50,7 @@ public class playlistController {
 		List<Songs>songslist=songServ.fetchSongs();
 		
 		model.addAttribute("songs",songslist);
-		return "createplaylist";
+		return "usercreateplaylists";
 	}
 
 }

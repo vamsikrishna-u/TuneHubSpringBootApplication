@@ -2,9 +2,9 @@ package com.example.demo.Controller;
 
 
 import java.util.List;
+import java.security.Principal;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,23 +15,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.Entities.Playlist;
 import com.example.demo.Entities.Songs;
 import com.example.demo.Entities.Users;
-import com.example.demo.Repositories.UserRepositories;
 import com.example.demo.Services.PlayListServices;
 import com.example.demo.Services.SongServices;
-import com.example.demo.Services.UserServiceImplements;
 import com.example.demo.Services.UserServices;
 
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
 	
-	@Autowired
-	UserServices userServ;
-	@Autowired
-	SongServices songServ;
-	@Autowired
-	PlayListServices pServ;
+	private final UserServices userServ;
+	private final SongServices songServ;
+	private final PlayListServices pServ;
+	private final String razorpayKeyId;
+
+	public UserController(UserServices userServ, SongServices songServ, PlayListServices pServ,
+			@Value("${razorpay.key-id}") String razorpayKeyId) {
+		this.userServ = userServ;
+		this.songServ = songServ;
+		this.pServ = pServ;
+		this.razorpayKeyId = razorpayKeyId;
+	}
 	
 	
 	
@@ -49,31 +52,10 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping("/loginformcontrol")
-	public String validateUser(@RequestParam String email, @RequestParam String password,HttpSession session) {
-	    
-	    
-	    if(userServ.byEmail(email)==false)
-	    {
-	    	return "loginfail";
-	    }
-	    else if (userServ.validateUser(email, password)) {
-	    	session.setAttribute("email", email);
-	        if ("user".equals(userServ.validateRole(email))) {
-	        	
-	            return "customerhome";
-	        } else {
-	            return "adminhome";
-	        }
-	    } else {
-	        return "loginfail";
-	    }
-	}
 	@GetMapping("/showallsongs")
-	public String customerSongs(HttpSession session,Model model)
+	public String customerSongs(Principal principal, Model model)
 	{
-		String email=(String)session.getAttribute("email");
-		Users user=userServ.getUser(email);
+		Users user=userServ.getUser(principal.getName());
 		boolean status=user.isPremium();
 		if(status==true)
 		{
@@ -83,39 +65,30 @@ public class UserController {
 		}
 		else
 		{
+			model.addAttribute("razorpayKeyId", razorpayKeyId);
 			return "samplepayment";
 		}		
 	}
-    //Logout
-	@GetMapping("/logout")
-	public String logout(HttpSession session)
+	@GetMapping("/change-password")
+	public String changePasswordForm()
 	{
-		session.invalidate();
-		return "login";
-	}
-	@PostMapping("/resetpassword")
-	public String resetPassword(HttpSession session,@RequestParam String email)
-	{
-		boolean exist=userServ.byEmail(email);
-		if(exist==true)
-		{
-			session.setAttribute("email", email);
-			return "emailfoundresetpass";
-		}
-		else {
-			return "forgotpassword";
-		}	
+		return "emailfoundresetpass";
 	}
 	
 	@PostMapping("/passwordresetformaction")
-	public String passwordUpdating(HttpSession session,@RequestParam String pass1)
+	public String passwordUpdating(Principal principal, @RequestParam String currentPassword,
+			@RequestParam String pass1,
+			@RequestParam String passreset, Model model)
 	{
-		String strEmail=(String)session.getAttribute("email");
-		Users user=userServ.getUser(strEmail);
-		user.setPassword(pass1);
-		userServ.updateUser(user);
-		System.out.println("Updated password : "+pass1);
-		return "login";
+		if (!pass1.equals(passreset)) {
+			model.addAttribute("passwordMismatch", true);
+			return "emailfoundresetpass";
+		}
+		if (!userServ.updatePassword(principal.getName(), currentPassword, pass1)) {
+			model.addAttribute("currentPasswordInvalid", true);
+			return "emailfoundresetpass";
+		}
+		return "redirect:/map-login?passwordReset";
 	}	
 	@GetMapping("/usercreateplaylists")
 	public String userCreatePlaylists(Model model)
@@ -126,10 +99,9 @@ public class UserController {
 	}
 	
 	@PostMapping("/adduserplaylists")
-	public String playListDisplay(HttpSession session,@ModelAttribute Playlist plist)
+	public String playListDisplay(Principal principal,@ModelAttribute Playlist plist)
 	{
-		String email=(String)session.getAttribute("email");
-		Users user=userServ.getUser(email);
+		Users user=userServ.getUser(principal.getName());
 		 user.getUserplaylist().add(plist);
 		userServ.addPlaylistToUser(user, plist);
 		for(Songs song:plist.getSongs() )
@@ -141,21 +113,18 @@ public class UserController {
 	}
 	
 	@GetMapping("viewcustomerplaylist")
-	public String fetchLists(Model model,HttpSession session)
+	public String fetchLists(Model model, Principal principal)
 	{
-		String email=(String)session.getAttribute("email");
-		
-		List<Playlist> playlist=pServ.userPlayList(email);
+		List<Playlist> playlist=pServ.userPlayList(principal.getName());
 		model.addAttribute("playlist", playlist);
 		return "userviewplaylist";
 	}
 	
 	//Admin Adding Playlist
 	@PostMapping("/add")
-	public String adminPlayListDisplay(HttpSession session,@ModelAttribute Playlist plist)
+	public String adminPlayListDisplay(Principal principal,@ModelAttribute Playlist plist)
 	{
-		String email=(String)session.getAttribute("email");
-		Users user=userServ.getUser(email);
+		Users user=userServ.getUser(principal.getName());
 		 user.getUserplaylist().add(plist);
 		userServ.addPlaylistToUser(user, plist);
 		for(Songs song:plist.getSongs() )
@@ -167,11 +136,9 @@ public class UserController {
 	}
 	
 	@GetMapping("/map-viewadminplaylist")
-	public String adminfetchLists(Model model,HttpSession session)
+	public String adminfetchLists(Model model, Principal principal)
 	{
-		String email=(String)session.getAttribute("email");
-		
-		List<Playlist> playlist=pServ.userPlayList(email);
+		List<Playlist> playlist=pServ.userPlayList(principal.getName());
 		model.addAttribute("playlist", playlist);
 		return "adminviewplaylist";
 	}
